@@ -133,9 +133,9 @@ public class Main {
             } else if (puntajeJugador > 21) {
                 System.out.println("Dealer gana (Jugador se pasó).");
             } else if (puntajeDealer > 21) {
-                System.out.println(jugador.getNombre() + " gana (Dealer se pasó). 🎉");
+                System.out.println(jugador.getNombre() + " gana (Dealer se pasó). ");
             } else if (puntajeJugador > puntajeDealer) {
-                System.out.println(jugador.getNombre() + " gana. 🎉");
+                System.out.println(jugador.getNombre() + " gana. ");
             } else if (puntajeDealer > puntajeJugador) {
                 System.out.println("Dealer gana.");
             } else {
