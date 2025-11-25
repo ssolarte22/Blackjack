@@ -1,7 +1,7 @@
 package Vista;
 
 import Modelo.ListaEnlazada.ImprimirCarta;
-import Modelo.ListaEnlazada.Dealer;
+import Modelo.ArbolBinario.Dealer;
 import Modelo.ListaEnlazada.Jugador;
 import Modelo.ListaEnlazada.Baraja;
 import Modelo.Carta;
@@ -17,33 +17,32 @@ public class Main {
 
         Scanner scanner = new Scanner(System.in);
 
-        System.out.println("Bienvenido a Blackjack versión consola");
+        System.out.println("Bienvenido a Blackjack version consola");
 
         boolean seguirJugando = true;
 
         while (seguirJugando) {
 
-            System.out.print("Ingrese su nombre: ");
-            String nombreJugador = scanner.next().trim();
-            if (nombreJugador.isEmpty()) nombreJugador = "Jugador";
+            System.out.print("ingrese su nombre: ");
+            String nombreJugador = scanner.next();
+            if (nombreJugador.isEmpty()) nombreJugador = "jugador";
 
             // Crear estructuras
             Baraja baraja = new Baraja();
             Pila historial = new Pila();
-            Turnos turnos = new Turnos(); // Se crea la cola de turnos
+            Turnos turnos = new Turnos();
             TablaHash hash = new TablaHash(31);
 
             // Crear jugadores
             Jugador jugador = new Jugador(nombreJugador);
-            Jugador dealer = new Jugador("Dealer");
-            Dealer dealerLogica = new Dealer(); // Instancia que contiene el Árbol Binario
+            Jugador dealer = new Jugador("dealer");
+            Dealer dealerLogica = new Dealer();
 
-            // Guardar jugadores en la Tabla Hash
+            // Guardar jugadores
             hash.put(jugador.getNombre(), jugador);
             hash.put(dealer.getNombre(), dealer);
 
-            // Reparto inicial (2 cartas a cada uno)
-            // Se alternan para simular un reparto real
+            // Reparto inicial
             Carta cartaJugador1 = baraja.robar();
             jugador.recibirCarta(cartaJugador1);
             historial.apilar(cartaJugador1);
@@ -66,12 +65,12 @@ public class Main {
                    !jugador.getEstado().equals("PLANTADO")) {
 
                 System.out.println();
-                System.out.println("Turno de: " + jugador.getNombre());
-                System.out.println("Cartas del jugador:");
+                System.out.println("turno de " + jugador.getNombre());
+                System.out.println("cartas del jugador:");
                 ImprimirCarta.imprimirLista(jugador.getMano());
-                System.out.println("Puntaje: " + jugador.getPuntaje());
+                System.out.println("puntaje: " + jugador.getPuntaje());
 
-                System.out.print("¿Desea otra carta? (s/n): ");
+                System.out.print("Desea otra carta? (s/n): ");
                 String respuesta = scanner.next().toLowerCase();
 
                 if (respuesta.equals("s")) {
@@ -82,7 +81,7 @@ public class Main {
                     historial.apilar(nuevaCarta);
 
                     if (jugador.getPuntaje() > 21) {
-                        System.out.println("¡Te pasaste!");
+                        System.out.println("te pasaste");
                         jugador.setEstado("BUST");
                     }
 
@@ -94,75 +93,72 @@ public class Main {
 
             // ================= TURNO DEL DEALER =================
 
-            System.out.println("\n--------------------------");
-            System.out.println("Turno del Dealer");
-            System.out.println("Cartas iniciales del Dealer:");
+            System.out.println("\nTurno del Dealer");
+            System.out.println("artas del Dealer:");
             ImprimirCarta.imprimirLista(dealer.getMano());
-            System.out.println("Puntaje inicial: " + dealer.getPuntaje());
-            System.out.println("--------------------------");
+            System.out.println("puntaje: " + dealer.getPuntaje());
 
-            // CORRECCIÓN PRINCIPAL:
-            // Delegamos la inteligencia artificial al objeto 'dealerLogica'.
-            // Este objeto usará internamente el Árbol Binario para decidir.
-            dealerLogica.ejecutarTurno(dealer, baraja);
-            
-            // Nota: Las cartas que pida el dealer en su turno automático no se agregarán
-            // a la variable 'historial' (Pila) en el Main, porque el método ejecutarTurno
-            // no recibe la pila. Si necesitas que aparezcan en el historial final,
-            // deberías modificar el método en Dealer.java para aceptar la Pila.
+            while (dealer.getPuntaje() < 17) {
 
-            System.out.println("Turno del Dealer finalizado.");
+                System.out.println("el dealer toma una carta...");
+                Carta nuevaCartaDealer = baraja.robar();
+                dealer.recibirCarta(nuevaCartaDealer);
+                historial.apilar(nuevaCartaDealer);
+
+                System.out.println("cartas del Dealer:");
+                ImprimirCarta.imprimirLista(dealer.getMano());
+                System.out.println("puntaje: " + dealer.getPuntaje());
+            }
+
+            System.out.println("el dealer se planta.");
 
             // ================= RESULTADOS =================
 
             int puntajeJugador = jugador.getPuntaje();
             int puntajeDealer = dealer.getPuntaje();
 
-            System.out.println("\n=== RESULTADOS ===");
+            System.out.println("\nRESULTADOS");
 
-            System.out.println("Jugador (" + jugador.getNombre() + "):");
+            System.out.println("jugador:");
             ImprimirCarta.imprimirLista(jugador.getMano());
-            System.out.println("Puntaje: " + puntajeJugador + "\n");
+            System.out.println("puntaje: " + puntajeJugador + "\n");
 
-            System.out.println("Dealer:");
+            System.out.println("dealer:");
             ImprimirCarta.imprimirLista(dealer.getMano());
-            System.out.println("Puntaje: " + puntajeDealer + "\n");
+            System.out.println("ountaje: " + puntajeDealer + "\n");
 
             if (puntajeJugador > 21 && puntajeDealer > 21) {
-                System.out.println("Ambos se pasaron. Empate técnico.");
+                System.out.println("ambos se pasaron empataron");
             } else if (puntajeJugador > 21) {
-                System.out.println("Dealer gana (Jugador se pasó).");
+                System.out.println("cealer gana.");
             } else if (puntajeDealer > 21) {
-                System.out.println(jugador.getNombre() + " gana (Dealer se pasó). ");
+                System.out.println(jugador.getNombre() + " gana.");
             } else if (puntajeJugador > puntajeDealer) {
-                System.out.println(jugador.getNombre() + " gana. ");
+                System.out.println(jugador.getNombre() + " gana.");
             } else if (puntajeDealer > puntajeJugador) {
-                System.out.println("Dealer gana.");
+                System.out.println("cealer gana.");
             } else {
-                System.out.println("Empate.");
+                System.out.println("empate.");
             }
 
             // ================= HISTORIAL =================
 
-            System.out.println("\nHistorial de cartas jugadas (Pila LIFO):");
-            // Nota: Muestra principalmente las del jugador y el reparto inicial
-            // debido a la limitación explicada arriba.
+            System.out.println("\nHistorial de cartas:");
             Carta cartaHistorial;
+
             while ((cartaHistorial = historial.desapilar()) != null) {
                 System.out.println(cartaHistorial);
             }
 
             // ================= REINICIAR JUEGO =================
 
-            System.out.print("\n¿Desea jugar otra vez? (s/n): ");
+            System.out.print("\nDesea jugar otra vez? (s/n): ");
             String respuestaRepetir = scanner.next().toLowerCase();
 
             if (!respuestaRepetir.equals("s")) {
                 seguirJugando = false;
-                System.out.println("Fin del juego. ¡Gracias por jugar!");
+                System.out.println("fin del juego.");
             }
         }
-        
-        scanner.close();
     }
 }

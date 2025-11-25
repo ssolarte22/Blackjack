@@ -1,19 +1,20 @@
 package Modelo.Cola;
 
-
 public class Turnos {
-    private Cola cola;
+
+    private String turnoActual;
 
     public Turnos() {
-        cola = new Cola();
-        cola.encolar("Jugador");
-        cola.encolar("Dealer");
+        turnoActual = "Jugador";
     }
 
-    //devuelve el siguiente turno
     public String siguiente() {
-        String t = cola.desencolar();
-        if (t != null) cola.encolar(t);
-        return t;
+        String turno = turnoActual;
+        if (turnoActual.equals("Jugador")) {
+            turnoActual = "Dealer";
+        } else {
+            turnoActual = "Jugador";
+        }
+        return turno;
     }
 }

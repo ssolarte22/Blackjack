@@ -1,46 +1,49 @@
 package Modelo.Cola;
 
+import Modelo.Carta;
+import Modelo.Nodo;
+
 public class Cola {
 
-    private class NodoCola {
-        String dato;
-        NodoCola siguiente;
-
-        NodoCola(String dato) {
-            this.dato = dato;
-            this.siguiente = null;
-        }
-    }
-
-    private NodoCola inicio;
-    private NodoCola fin;
+    private Nodo inicio;
+    private Nodo fin;
 
     public Cola() {
         inicio = null;
         fin = null;
     }
 
-    public void encolar(String dato) {
-        NodoCola nuevo = new NodoCola(dato);
-        if (fin != null) fin.siguiente = nuevo;
-        fin = nuevo;
-        if (inicio == null) inicio = nuevo;
-    }
-
-    public String desencolar() {
-        if (inicio == null) return null;
-        String dato = inicio.dato;
-        inicio = inicio.siguiente;
-        if (inicio == null) fin = null;
-        return dato;
-    }
-
     public boolean esVacia() {
         return inicio == null;
     }
 
-    public String verInicio() {
-        if (inicio == null) return null;
-        return inicio.dato;
+    public void encolar(Carta carta) {
+        Nodo nuevo = new Nodo(carta);
+        if (fin != null) {
+            fin.setSiguiente(nuevo);
+        }
+        fin = nuevo;
+        if (inicio == null) {
+            inicio = nuevo;
+        }
+    }
+
+    public Carta desencolar() {
+        if (esVacia()) {
+            return null;
+        }
+        Carta carta = inicio.getCarta();
+        inicio = inicio.getSiguiente();
+        if (inicio == null) {
+            fin = null;
+        }
+        return carta;
+    }
+
+    public Carta verInicio() {
+        if (esVacia()) {
+            return null;
+        }
+        return inicio.getCarta();
     }
 }

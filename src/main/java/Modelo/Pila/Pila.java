@@ -4,12 +4,14 @@ import Modelo.Carta;
 import Modelo.Nodo;
 
 public class Pila {
+
     private Nodo cima;
 
-    public Pila() { cima = null; }
+    public Pila() {
+        cima = null;
+    }
 
-    public boolean esVacia() 
-    { 
+    public boolean esVacia() {
         return cima == null;
     }
 
@@ -20,13 +22,20 @@ public class Pila {
     }
 
     public Carta desapilar() {
-        if (esVacia()) return null;
+        if (esVacia()) {
+            return null;
+        }
         Carta carta = cima.getCarta();
         cima = cima.getSiguiente();
         return carta;
     }
 
     public Carta verCima() {
-        return esVacia() ? null : cima.getCarta();
+        if (esVacia()) {
+            return null;
+        } else {
+            return cima.getCarta();
+        }
     }
+
 }

@@ -14,53 +14,46 @@ public class TablaHash {
 
     private int calcularIndice(String clave) {
         int suma = 0;
-
         for (int i = 0; i < clave.length(); i++) {
             suma += clave.charAt(i);
         }
-
-        int indice = suma % capacidad;
-        return indice;
+        return suma % capacidad;
     }
 
     public void put(String clave, Jugador jugador) {
-
         int indice = calcularIndice(clave);
         EntradaHash nodoActual = celdas[indice];
 
-        // si esta vacio, guardar ahi
+        // Si está vacío, insertar directamente
         if (nodoActual == null) {
             celdas[indice] = new EntradaHash(clave, jugador);
             return;
         }
 
-        // buscar si la clave ya existe
+        // Buscar si la clave existe
         EntradaHash nodoAnterior = null;
         while (nodoActual != null) {
-
-            if (nodoActual.clave.equals(clave)) {
-                nodoActual.valor = jugador; // actualizar
+            if (nodoActual.getClave().equals(clave)) {
+                nodoActual.setValor(jugador); // Actualizar
                 return;
             }
-
             nodoAnterior = nodoActual;
-            nodoActual = nodoActual.siguiente;
+            nodoActual = nodoActual.getSiguiente();
         }
 
-        // agregar al final
-        nodoAnterior.siguiente = new EntradaHash(clave, jugador);
+        // Agregar al final de la lista
+        nodoAnterior.setSiguiente(new EntradaHash(clave, jugador));
     }
 
     public Jugador get(String clave) {
-
         int indice = calcularIndice(clave);
         EntradaHash nodoActual = celdas[indice];
 
         while (nodoActual != null) {
-            if (nodoActual.clave.equals(clave)) {
-                return nodoActual.valor;
+            if (nodoActual.getClave().equals(clave)) {
+                return nodoActual.getValor();
             }
-            nodoActual = nodoActual.siguiente;
+            nodoActual = nodoActual.getSiguiente();
         }
 
         return null;

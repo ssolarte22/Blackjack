@@ -19,6 +19,9 @@ public class ImprimirCarta {
             actual = actual.getSiguiente();
             contador++;
         }
-        if (contador == 1) System.out.println("la lista esta vacia :(");
+        if (contador == 1) 
+            {
+            System.out.println("la lista esta vacia :(");
+            }
     }
 }
