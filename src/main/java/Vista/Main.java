@@ -93,24 +93,24 @@ public class Main {
 
             // ================= TURNO DEL DEALER =================
 
-            System.out.println("\nTurno del Dealer");
-            System.out.println("artas del Dealer:");
+            System.out.println("\n--------------------------");
+            System.out.println("Turno del Dealer");
+            System.out.println("Cartas iniciales del Dealer:");
             ImprimirCarta.imprimirLista(dealer.getMano());
-            System.out.println("puntaje: " + dealer.getPuntaje());
+            System.out.println("Puntaje inicial: " + dealer.getPuntaje());
+            System.out.println("--------------------------");
 
-            while (dealer.getPuntaje() < 17) {
+            // CORRECCIÓN PRINCIPAL:
+            // Delegamos la inteligencia artificial al objeto 'dealerLogica'.
+            // Este objeto usará internamente el Árbol Binario para decidir.
+            dealerLogica.ejecutarTurno(dealer, baraja);
+            
+            // Nota: Las cartas que pida el dealer en su turno automático no se agregarán
+            // a la variable 'historial' (Pila) en el Main, porque el método ejecutarTurno
+            // no recibe la pila. Si necesitas que aparezcan en el historial final,
+            // deberías modificar el método en Dealer.java para aceptar la Pila.
 
-                System.out.println("el dealer toma una carta...");
-                Carta nuevaCartaDealer = baraja.robar();
-                dealer.recibirCarta(nuevaCartaDealer);
-                historial.apilar(nuevaCartaDealer);
-
-                System.out.println("cartas del Dealer:");
-                ImprimirCarta.imprimirLista(dealer.getMano());
-                System.out.println("puntaje: " + dealer.getPuntaje());
-            }
-
-            System.out.println("el dealer se planta.");
+            System.out.println("Turno del Dealer finalizado.");
 
             // ================= RESULTADOS =================
 
